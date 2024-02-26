@@ -9,16 +9,58 @@
 </head>
 <body>
     <header>Todo List</header>
-    <div class="content">
-        <div class="sidebar">
-            <h1>Projects</h1>
-            <button>Default project</button>
-            <button>Add project</button>
-        </div>
-        <div class="display">
-            <h1 class="dispay-heading"></h1>
-            <button class="task-button"> + Add Task</button>
-        </div>
+    
+    <div class="sidebar">
+        <h1>Projects</h1>
+        <button>Default project</button>
+        <button class="project-button"> + Add project</button>
+        <dialog class="project-dialog">
+            <form class="project-details">
+                <p>
+                    <label for="project-title">Project Title:</label>
+                    <input type="text" name="project-title" id="project-title">
+                </p>
+                <div>
+                    <button class="project-cancel">Cancel</button>
+                    <button class="project-ok">Ok</button>
+                </div>
+            </form>
+        </dialog>
+    </div>
+
+    <div class="display">
+        <h1 class="dispay-heading">Default Project</h1>
+        <button class="task-button"> + Add list</button>
+
+        <dialog class="task-dialog">
+            <form class="task-details">
+                <p>
+                    <label for="task-title">Title:</label>
+                    <input type="text" name="task-title" id="task-title">
+                </p>
+                <p>
+                    <label for="description">Description:</label>
+                    <textarea name="description" id="description" cols="30" rows="10"></textarea>
+                </p>
+                <p>
+                    <label for="date">Due date:</label>
+                    <input type="date" name="date" id="date">
+                </p>
+                <p>
+                    <label for="priority">Priority</label>
+                    <select name="priority" id="priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </p>
+                <div>
+                    <button class="cancel">Cancel</button>
+                    <button class="ok">Ok</button>
+                </div>
+            </form>
+        </dialog>
+
     </div>
     
     <div class="git-credit">
