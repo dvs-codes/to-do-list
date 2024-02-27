@@ -4,8 +4,10 @@ const projectDialog = document.querySelector('.project-dialog')
 const sidebar = document.querySelector('.sidebar')
 const projectForm = document.querySelector('.project-details')
 const addProjectButton = document.querySelector('.project-button')
+const projectList = document.querySelector('.project-list')
 const projectTitle = document.querySelector('#project-title')
 const projectOkButton = document.querySelector('.project-ok')
+const displayHeading = document.querySelector('.dispay-heading')
 const taskDialog = document.querySelector('.task-dialog')
 const addTaskButton = document.querySelector('.task-button')
 const eleTitle = document.querySelector('#title')
@@ -21,22 +23,31 @@ addProjectButton.addEventListener('click', () => {
 })
 
 projectOkButton.addEventListener('click', (event) => {
+    //clears all the projects
+    projectList.textContent =""
     event.preventDefault()
     ProjectkMaker()
 
+    //takes array item from project array and creates new project tab with 
     projects.forEach((project) => {
         let newProjectTab = document.createElement('button')
+        newProjectTab.classList.add(project.projectName)
+        
         newProjectTab.textContent = project.projectName
-        sidebar.appendChild(newProjectTab)
+        projectList.appendChild(newProjectTab)
+        
+        //its own eventlisteners
+        newProjectTab.addEventListener('click', projectHeadingAdder)
     })
 
-    console.log(projects)
+    //closes and resets dialog and form
     projectDialog.close()
     projectForm.reset()
-    project.forEach(() => {
-        
-    })
 })
+
+function projectHeadingAdder(event) {
+    displayHeading.textContent = event.target.textContent
+}
 
 
 export {projectTitle}

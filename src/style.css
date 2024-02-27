@@ -25,6 +25,11 @@ header {
     flex-direction: column;
 }
 
+.project-list {
+    display: flex;
+    flex-direction: column;
+}
+
 .display {
     grid-row: 2/3;
     grid-column: 2/3;
