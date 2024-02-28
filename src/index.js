@@ -1,7 +1,10 @@
 import './style.css';
-import { eleTitle, okButton,projectTitle } from './dom_handler';
+import { currentProject, taskTitle,taskDescription,taskDate, taskPriority,projectTitle } from './dom_handler';
+
+console.log(taskTitle.value)
 
 let projects = [];
+let Tasks = []
 
 class Task {
     constructor(title, description, duedate, priority) {
@@ -13,8 +16,9 @@ class Task {
 }
 
 class Project {
-    constructor(projectName) {
+    constructor(projectName, taskArray) {
         this.projectName =projectName;
+        this.taskArray = ['first', 'second']
     }
 }
 
@@ -23,9 +27,12 @@ function ProjectkMaker() {
     projects.push(newProject)
 }
 
+function taskAdder() {
+    const newTask = new Task(taskTitle.value, taskDescription.value, taskDate.value, taskPriority.value)
+    Tasks.push(newTask)
+}
 
 
 
 
-
-export {projects, ProjectkMaker}
+export {projects,Tasks, ProjectkMaker, taskAdder}
