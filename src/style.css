@@ -37,6 +37,11 @@ header {
     flex-direction: column;
 }
 
+.task-list {
+    display: flex;
+    flex-direction: column;
+}
+
 .git-credit {
     display: flex;
     justify-content: center;
