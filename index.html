@@ -12,10 +12,19 @@
     
     <div class="sidebar">
         <h1>Projects</h1>
+
         <div class="project-list">
-        </div>
-        <button>Default project</button>
+        
+            <div class="project-tab">
+                <div>Defaul Project</div>
+                <div class="actions">
+                    <button class="Rename">Rename</button>
+                    <button class="delete">Delete</button>
+                </div>
+            </div>
+
         <button class="project-button"> + Add project</button>
+
         <dialog class="project-dialog">
             <form class="project-details">
                 <p>
@@ -28,12 +37,25 @@
                 </div>
             </form>
         </dialog>
+        </div>
+
     </div>
 
     <div class="display">
         <h1 class="dispay-heading">Default Project</h1>
         <div class="task-list">
-
+            <div class="task-tab">
+                <div class="default-task-title">
+                    <input type="checkbox" name="complete" id="complete">
+                    <span class="default-task-title">default task</span>
+                </div>
+                <div class="actions">
+                    <div class="date"></div>
+                    <button class="priority">High</button>
+                    <button class="expand">expand</button>
+                    <button class="delete">delete</button>
+                </div>
+            </div>
         </div>
         <button class="task-button"> + Add list</button>
 
