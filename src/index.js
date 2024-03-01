@@ -15,11 +15,12 @@ class Task {
         this.description =description;
         this.duedate = duedate;
         this.priority = priority;
+        this.completion = false;
     }
 }
 
 class Project {
-    constructor(projectName, taskArray) {
+    constructor(projectName) {
         this.projectName =projectName;
         this.taskArray = []
     }

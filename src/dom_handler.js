@@ -31,21 +31,24 @@ addProjectButton.addEventListener('click', () => {
 })
 
 projectOkButton.addEventListener('click', (event) => {
-    //clears all the projects
+    //clears all the projects, prevents default and creates a project and pushes 
+    // them inside projects array
     projectList.textContent =""
     event.preventDefault()
     ProjectkMaker()
 
     //takes array item from project array and creates new project tab with 
+    //its own eventlisteners
     projects.forEach((project) => {
-        let newProjectTab = document.createElement('button')
-        newProjectTab.classList.add(project.projectName)
+        const newProjectTab = document.createElement('div')
+        const newProjectTitle = document.createElement('button')
+        newProjectTitle.classList.add(project.projectName)
         
-        newProjectTab.textContent = project.projectName
+        newProjectTitle.textContent = project.projectName
+        newProjectTab.appendChild(newProjectTitle)
         projectList.appendChild(newProjectTab)
         
-        //its own eventlisteners
-        newProjectTab.addEventListener('click', projectHeadingAdder)
+        newProjectTitle.addEventListener('click', projectHeadingAdder)
     })
 
 
@@ -74,10 +77,18 @@ taskOkbutton.addEventListener('click', (event) => {
             //loop through the taskArrays to display every task 
             project.taskArray.forEach((array) => {
 
+                
+                
                 //adding the main tab as button
                 const taskTab = document.createElement('div')
                 taskTab.textContent = array.title
+                taskTab.classList.add(array.title)
                 taskList.appendChild(taskTab)
+
+                //adding a checkbox
+                const checkbox = document.createElement('input')
+                checkbox.setAttribute("type", "checkbox")
+                taskTab.appendChild(checkbox)
 
             })
         }

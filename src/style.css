@@ -30,6 +30,16 @@ header {
     flex-direction: column;
 }
 
+.project-tab {
+    display: flex;
+    justify-content: space-between;
+    background-color: aliceblue;
+}
+
+.project-tab:hover {
+    background-color: rgb(157, 159, 161);
+}
+
 .display {
     grid-row: 2/3;
     grid-column: 2/3;
@@ -40,6 +50,16 @@ header {
 .task-list {
     display: flex;
     flex-direction: column;
+}
+
+.task-tab {
+    display: flex;
+    justify-content: space-between;
+    background-color: aliceblue;
+}
+
+.task-tab:hover {
+    background-color: rgb(71, 80, 88);
 }
 
 .git-credit {
