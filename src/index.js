@@ -1,13 +1,21 @@
 import './style.css';
-import {  taskTitle,taskDescription,taskDate, taskPriority,projectTitle } from './dom_handler';
+import { taskTitle,taskDescription,taskDate, 
+    taskPriority,projectTitle, taskListLoader, projectListAdder } from './dom_handler';
 
 let currentProject = '';
 
-console.log(taskTitle.value)
-
-let projects = [];
-let taskArray = []
-let defaultTaskArray = []
+let defaultProject = {
+    projectName :'Default Project',
+    taskArray : [
+        {
+        title: "Default Task",
+        description: "lorem ipsum ipsum ipsumesum",
+        duedate: '01/01/2010',
+        priority: 'High',
+        completion : false
+    }]
+}
+let projects = [defaultProject];
 
 class Task {
     constructor(title, description, duedate, priority) {
@@ -24,13 +32,15 @@ class Project {
         this.projectName =projectName;
         this.taskArray = []
     }
+
+    deleteProject() {
+        console.log(this.projectName)
+    }
 }
 
 function ProjectkMaker() {
     const newProject = new Project(projectTitle.value)
     projects.push(newProject)
-    currentProject = newProject.projectName
-    console.log(newProject.projectName)
 }
 
 function taskAdder() {
@@ -42,12 +52,12 @@ function taskAdder() {
         if (currentProject === project.projectName ) {
             project.taskArray.push(newTask)
         } else if (!currentProject ) {
-            defaultTaskArray.push.apply(newTask)
+            defaultProject.taskArray.push(newTask)
         }
     })
 }
 
-
-
+projectListAdder()
+taskListLoader()
 
 export {projects, currentProject, ProjectkMaker, taskAdder}

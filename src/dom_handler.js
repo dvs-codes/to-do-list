@@ -30,66 +30,101 @@ addProjectButton.addEventListener('click', () => {
     projectDialog.showModal()
 })
 
-projectOkButton.addEventListener('click', (event) => {
+projectOkButton.addEventListener('click', projectListAdder)
+
+taskOkbutton.addEventListener('click', taskListLoader)
+
+function projectListAdder(event) {
     //clears all the projects, prevents default and creates a project and pushes 
     // them inside projects array
     projectList.textContent =""
+
+    if (event && event.target.nodeName==='BUTTON') {
     event.preventDefault()
     ProjectkMaker()
+    } 
 
     //takes array item from project array and creates new project tab with 
     //its own eventlisteners
     projects.forEach((project) => {
         const newProjectTab = document.createElement('div')
-        const newProjectTitle = document.createElement('button')
-        newProjectTitle.classList.add(project.projectName)
-        
+        newProjectTab.classList.add('project-tab')
+
+        //title 
+        const newProjectTitle = document.createElement('div')
         newProjectTitle.textContent = project.projectName
+
+        //delete
+        const projectDeleteButton = document.createElement('button')
+        projectDeleteButton.textContent = "Delete"
+        projectDeleteButton.addEventListener('click', () => {
+            project.deleteProject()
+        })
+
         newProjectTab.appendChild(newProjectTitle)
+        newProjectTab.appendChild(projectDeleteButton)
         projectList.appendChild(newProjectTab)
         
-        newProjectTitle.addEventListener('click', projectHeadingAdder)
+        // newProjectTitle.addEventListener('click', )
     })
-
 
     //closes and resets dialog and form
     projectDialog.close()
     projectForm.reset()
     console.log(projects)
-})
 
-function projectHeadingAdder(event) {
-    displayHeading.textContent = event.target.textContent
-    currentProject = event.target.textContent
-    console.log(currentProject)
 }
 
-taskOkbutton.addEventListener('click', (event) => {
-    event.preventDefault()
+function taskListLoader(event) {
+    console.log(currentProject)
     taskList.textContent = ''
-
-    taskAdder()
+    if (event && event.target.nodeName === "BUTTON") {
+        event.preventDefault()
+        taskAdder()
+    }
 
     //loops thorugh projects array to find the current project
     projects.forEach((project) => {
 
-        if(project.projectName === currentProject) {
+        if(project.projectName === currentProject ||
+           project.projectName === 'Default Project') {
             //loop through the taskArrays to display every task 
             project.taskArray.forEach((array) => {
 
-                
-                
-                //adding the main tab as button
+                //adding a checkbox with title
                 const taskTab = document.createElement('div')
-                taskTab.textContent = array.title
-                taskTab.classList.add(array.title)
-                taskList.appendChild(taskTab)
+                // taskTab.classList.add(array.title)
+                taskTab.classList.add('task-tab')
 
-                //adding a checkbox
+                const taskTitle = document.createElement('div')
+                taskTitle.textContent = array.title
+                // taskTitle.classList.add(array.title)
+                
+                //actions and info
+                const actions = document.createElement('div')
+                actions.classList.add('actions')
+                const priority = document.createElement('div')
+                priority.textContent = array.priority
+                const expandButton = document.createElement('button')
+                expandButton.textContent = 'Expand'
+                const deleteButton = document.createElement('button')
+                deleteButton.textContent = 'Delete'
+                const editButton = document.createElement('button')
+                editButton.textContent = 'Edit'
                 const checkbox = document.createElement('input')
                 checkbox.setAttribute("type", "checkbox")
-                taskTab.appendChild(checkbox)
+                
+                
+                taskTab.appendChild(taskTitle)
+                actions.appendChild(priority)
+                actions.appendChild(expandButton)
+                actions.appendChild(editButton)
+                actions.appendChild(deleteButton)
+                taskTab.appendChild(actions)
+                actions.appendChild(checkbox)
+                taskList.appendChild(taskTab)
 
+                displayHeading.textContent = project.projectName
             })
         }
     })
@@ -97,10 +132,13 @@ taskOkbutton.addEventListener('click', (event) => {
     
     taskDialog.close()
     taskForm.reset()
-})
+    console.log(projects)
+}
+
 
 taskCancelButton.addEventListener('click', (event) => {
     event.preventDefault()
 })
 
-export {projectTitle, taskTitle, taskDescription, taskDate, taskPriority}
+export {projectTitle, taskTitle, taskDescription, taskDate, taskPriority,
+     projectListAdder, taskListLoader}
