@@ -2,7 +2,7 @@ import './style.css';
 import { taskTitle,taskDescription,taskDate, 
     taskPriority,projectTitle, taskListLoader, projectListAdder } from './dom_handler';
 
-let currentProject = '';
+let currentProject = 'Default Project';
 
 let defaultProject = {
     projectName :'Default Project',
@@ -41,6 +41,12 @@ class Project {
 function ProjectkMaker() {
     const newProject = new Project(projectTitle.value)
     projects.push(newProject)
+    currentProjectSetter(newProject.projectName)
+
+}
+
+function currentProjectSetter(targetProject) {
+    currentProject = targetProject;
 }
 
 function taskAdder() {
@@ -60,4 +66,4 @@ function taskAdder() {
 projectListAdder()
 taskListLoader()
 
-export {projects, currentProject, ProjectkMaker, taskAdder}
+export {projects, currentProject, ProjectkMaker, taskAdder, currentProjectSetter}

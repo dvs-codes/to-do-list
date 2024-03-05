@@ -1,4 +1,4 @@
-import { projects, ProjectkMaker, taskAdder,currentProject } from "./index"
+import { projects, ProjectkMaker, taskAdder,currentProject, currentProjectSetter } from "./index"
 
 const projectDialog = document.querySelector('.project-dialog')
 const sidebar = document.querySelector('.sidebar')
@@ -6,8 +6,9 @@ const projectForm = document.querySelector('.project-details')
 const addProjectButton = document.querySelector('.project-button')
 const projectList = document.querySelector('.project-list')
 const projectTitle = document.querySelector('#project-title')
-const projectOkButton = document.querySelector('.project-ok')
 
+const projectOkButton = document.querySelector('.project-ok')
+const projectCancelButton = document.querySelector('.project-cancel')
 
 const displayHeading = document.querySelector('.dispay-heading')
 const taskDialog = document.querySelector('.task-dialog')
@@ -19,8 +20,8 @@ const taskDescription = document.querySelector('#description')
 const taskDate = document.querySelector('#date')
 const taskPriority = document.querySelector('#priority')
 
-const taskOkbutton = document.querySelector('.ok')
-const taskCancelButton = document.querySelector('.cancel')
+const taskOkbutton = document.querySelector('.ok-button')
+const taskCancelButton = document.querySelector('.cancel-button')
 
 addTaskButton.addEventListener('click', () => {
     taskDialog.showModal()
@@ -39,9 +40,10 @@ function projectListAdder(event) {
     // them inside projects array
     projectList.textContent =""
 
-    if (event && event.target.nodeName==='BUTTON') {
+    if (event && event.target.className==='project-ok') {
     event.preventDefault()
     ProjectkMaker()
+    taskListLoader()
     } 
 
     //takes array item from project array and creates new project tab with 
@@ -65,20 +67,26 @@ function projectListAdder(event) {
         newProjectTab.appendChild(projectDeleteButton)
         projectList.appendChild(newProjectTab)
         
-        // newProjectTitle.addEventListener('click', )
+        newProjectTitle.addEventListener('click', taskListRefresher)
+
+        function taskListRefresher(event) {
+            //sets currentproject to whatever, needed to make a function since  
+            // modules cannot set values of variable from different modules.
+            currentProjectSetter(event.target.textContent)            
+            taskListLoader()
+        }
+
     })
 
     //closes and resets dialog and form
     projectDialog.close()
     projectForm.reset()
-    console.log(projects)
-
+    displayHeading.textContent = currentProject
 }
 
 function taskListLoader(event) {
-    console.log(currentProject)
     taskList.textContent = ''
-    if (event && event.target.nodeName === "BUTTON") {
+    if (event && event.target.className === "ok-button") {
         event.preventDefault()
         taskAdder()
     }
@@ -86,8 +94,7 @@ function taskListLoader(event) {
     //loops thorugh projects array to find the current project
     projects.forEach((project) => {
 
-        if(project.projectName === currentProject ||
-           project.projectName === 'Default Project') {
+        if(project.projectName === currentProject) {
             //loop through the taskArrays to display every task 
             project.taskArray.forEach((array) => {
 
@@ -138,6 +145,12 @@ function taskListLoader(event) {
 
 taskCancelButton.addEventListener('click', (event) => {
     event.preventDefault()
+})
+
+projectCancelButton.addEventListener('click', (event)=> {
+    event.preventDefault()
+    projectDialog.close()
+    projectForm.reset()
 })
 
 export {projectTitle, taskTitle, taskDescription, taskDate, taskPriority,
