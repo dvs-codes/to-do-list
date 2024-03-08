@@ -1,10 +1,10 @@
 import './style.css';
 import { taskTitle,taskDescription,taskDate, 
-    taskPriority,projectTitle, taskListLoader, projectListAdder } from './dom_handler';
+    taskPriority,projectTitle, taskListLoader, projectListUpdater } from './dom_handler';
 
-let currentProject = 'Default Project';
+let currentProjectName = 'Default Project';
 
-let defaultProject = {
+let projects = [{
     projectName :'Default Project',
     taskArray : [
         {
@@ -12,11 +12,39 @@ let defaultProject = {
         description: "lorem ipsum ipsum ipsumesum",
         duedate: '01/01/2010',
         priority: 'High',
-        completion : false
+        completion : false,
+        
     }],
-    completedTasks : []
+    completedTasks : [],
+    currentProjectSetter: function() {
+        currentProjectName = this.projectName
+    }
+}];
+
+
+class Project {
+    constructor(projectName) {
+        this.projectName =projectName;
+        this.taskArray = []
+        this.completedTasks = []
+    }
+    
+    deleteProject() {
+        let indexOfProject = projects.indexOf(this)
+        projects.splice(indexOfProject,1)
+    }
+
+    currentProjectSetter() {
+        currentProjectName = this.projectName
+    }
 }
-let projects = [defaultProject];
+
+function projectkMaker() {
+    const newProject = new Project(projectTitle.value)
+    projects.push(newProject)
+    currentProjectName = newProject.projectName
+}
+
 
 class Task {
     constructor(title, description, duedate, priority) {
@@ -26,41 +54,22 @@ class Task {
         this.priority = priority;
         this.completion = false;
     }
-}
 
-class Project {
-    constructor(projectName) {
-        this.projectName =projectName;
-        this.taskArray = []
-        this.completedTasks = []
+    deleteTask() {
+        projects.forEach((project) => {
+            let indexOfTask = project.taskArray.indexOf(this) 
+            if(project.projectName === currentProjectName) {
+                project.taskArray.splice(indexOfTask,1)
+            }
+        })
     }
-}
 
-function projectDeleter(project) {
-    let indexOfProject = projects.indexOf(project)
-    projects.splice(indexOfProject,1)
-}
-
-function ProjectkMaker() {
-    const newProject = new Project(projectTitle.value)
-    projects.push(newProject)
-    currentProjectSetter(newProject.projectName)
-
-}
-
-function currentProjectSetter(targetProject) {
-    currentProject = targetProject;
-}
-
-function taskDeleter(indexOfTask) {
-    
-    projects.forEach((project) => {
-        if (currentProject === project.projectName ) {
-            project.taskArray.splice(indexOfTask,1)
-        } else if (!currentProject ) {
-            defaultProject.taskArray.splice(indexOfTask,1)
-        }
-    })
+    editTask(newTitle, newDescription, newDate, newPriority) {
+        this.title = newTitle;
+        this.description =newDescription;
+        this.duedate = newDate;
+        this.priority = newPriority;
+    }
 }
 
 function taskAdder() {
@@ -69,16 +78,15 @@ function taskAdder() {
     
     //push the new task object into current active class, else into default
     projects.forEach((project) => {
-        if (currentProject === project.projectName ) {
+        if (currentProjectName === project.projectName ) {
             project.taskArray.push(newTask)
-        } else if (!currentProject ) {
+        } else if (!currentProjectName ) {
             defaultProject.taskArray.push(newTask)
         }
     })
 }
 
-projectListAdder()
+projectListUpdater()
 taskListLoader()
 
-export {projects, currentProject, ProjectkMaker, taskAdder, currentProjectSetter,
-        projectDeleter,taskDeleter}
+export {projects, currentProjectName , projectkMaker, taskAdder}

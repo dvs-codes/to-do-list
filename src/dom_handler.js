@@ -1,5 +1,5 @@
-import { projects, ProjectkMaker, taskAdder,currentProject, currentProjectSetter,
-        projectDeleter, taskDeleter } from "./index"
+import { projects, projectkMaker, taskAdder,currentProjectName,
+        taskDeleter } from "./index"
 
 const projectDialog = document.querySelector('.project-dialog')
 const sidebar = document.querySelector('.sidebar')
@@ -16,7 +16,7 @@ const taskDialog = document.querySelector('.task-dialog')
 const taskForm = document.querySelector('.task-details')
 const addTaskButton = document.querySelector('.task-button')
 const taskList = document.querySelector('.task-list')
-const taskTitle = document.querySelector('#task-title')
+const taskTitle = document.getElementById('task-title')
 const taskDescription = document.querySelector('#description')
 const taskDate = document.querySelector('#date')
 const taskPriority = document.querySelector('#priority')
@@ -34,16 +34,13 @@ addProjectButton.onclick = () => {
 
 projectOkButton.onclick =  projectListUpdater
 
-taskOkbutton.onclick = taskListLoader
-
 function projectListUpdater(event) {
     //clears all the projects, prevents default and creates a project and pushes 
     // them inside projects array
     projectList.textContent =""
-
     if (event && event.target.className==='project-ok') {
     event.preventDefault()
-    ProjectkMaker()
+    projectkMaker()
     taskListLoader()
     } 
 
@@ -61,7 +58,7 @@ function projectListUpdater(event) {
         const projectDeleteButton = document.createElement('button')
         projectDeleteButton.textContent = "Delete"
         projectDeleteButton.onclick = () => {
-            projectDeleter(project)
+            project.deleteProject()
             projectListUpdater()
         }
 
@@ -71,21 +68,23 @@ function projectListUpdater(event) {
         
         newProjectTitle.onclick = taskListRefresher
 
-        function taskListRefresher(event) {
+        function taskListRefresher() {
             //sets currentproject to whatever, needed to make a function since  
             // modules cannot set values of variable from different modules.
-            currentProjectSetter(event.target.textContent) 
-            displayHeading.textContent = currentProject
+            displayHeading.textContent = project.projectName
+            project.currentProjectSetter()
             taskListLoader()
         }
-
+        displayHeading.textContent = project.projectName
     })
 
     //closes and resets dialog and form
     projectDialog.close()
     projectForm.reset()
-    displayHeading.textContent = currentProject
+    console.log(currentProjectName)
 }
+
+taskOkbutton.onclick = taskListLoader
 
 function taskListLoader(event) {
     taskList.textContent = ''
@@ -97,7 +96,7 @@ function taskListLoader(event) {
     //loops thorugh projects array to find the current project
     projects.forEach((project) => {
 
-        if(project.projectName === currentProject) {
+        if(project.projectName === currentProjectName) {
             //loop through the taskArrays to display every task 
             project.taskArray.forEach((array,index) => {
 
@@ -126,11 +125,33 @@ function taskListLoader(event) {
                 const deleteButton = document.createElement('button')
                 deleteButton.textContent = 'Delete'
                 deleteButton.onclick = ()=> {
-                    taskDeleter(index)
+                    array.deleteTask()
                     taskListLoader()
                 }
+
+                //editbutton
                 const editButton = document.createElement('button')
                 editButton.textContent = 'Edit'
+                editButton.onclick = taskEditor
+
+                function taskEditor() {
+                        taskOkbutton.classList.toggle('edit')
+                        const taskeditButton = document.querySelector('.edit')
+                        taskDialog.showModal()
+                        taskeditButton.onclick = (event) => {
+                            // if (event && event.target.className === "edit-button") 
+                                event.preventDefault()
+                                const taskTitle = document.querySelector('#task-title')
+                                const taskDescription = document.querySelector('#description')
+
+                                array.editTask(taskTitle.value, taskDescription.value, taskDate.value, taskPriority.value)
+                                console.log(projects)
+                                taskDialog.close()
+                                taskForm.reset()
+                                taskListLoader()
+                            
+                        }
+                }
                 const checkbox = document.createElement('input')
                 checkbox.setAttribute("type", "checkbox")
 
@@ -167,6 +188,8 @@ function taskListLoader(event) {
 
 taskCancelButton.onclick = (event) => {
     event.preventDefault()
+    taskDialog.close()
+    taskForm.reset()
 }
 
 projectCancelButton.onclick = (event)=> {
@@ -176,4 +199,4 @@ projectCancelButton.onclick = (event)=> {
 }
 
 export {projectTitle, taskTitle, taskDescription, taskDate, taskPriority,
-     projectListUpdater as projectListAdder, taskListLoader}
+     projectListUpdater, taskListLoader}
