@@ -1,4 +1,5 @@
-import { projects, ProjectkMaker, taskAdder,currentProject, currentProjectSetter } from "./index"
+import { projects, ProjectkMaker, taskAdder,currentProject, currentProjectSetter,
+        projectDeleter, taskDeleter } from "./index"
 
 const projectDialog = document.querySelector('.project-dialog')
 const sidebar = document.querySelector('.sidebar')
@@ -23,19 +24,19 @@ const taskPriority = document.querySelector('#priority')
 const taskOkbutton = document.querySelector('.ok-button')
 const taskCancelButton = document.querySelector('.cancel-button')
 
-addTaskButton.addEventListener('click', () => {
+addTaskButton.onclick = () => {
     taskDialog.showModal()
-})
+}
 
-addProjectButton.addEventListener('click', () => {
+addProjectButton.onclick = () => {
     projectDialog.showModal()
-})
+}
 
-projectOkButton.addEventListener('click', projectListAdder)
+projectOkButton.onclick =  projectListUpdater
 
-taskOkbutton.addEventListener('click', taskListLoader)
+taskOkbutton.onclick = taskListLoader
 
-function projectListAdder(event) {
+function projectListUpdater(event) {
     //clears all the projects, prevents default and creates a project and pushes 
     // them inside projects array
     projectList.textContent =""
@@ -53,26 +54,28 @@ function projectListAdder(event) {
         newProjectTab.classList.add('project-tab')
 
         //title 
-        const newProjectTitle = document.createElement('div')
+        const newProjectTitle = document.createElement('button')
         newProjectTitle.textContent = project.projectName
 
         //delete
         const projectDeleteButton = document.createElement('button')
         projectDeleteButton.textContent = "Delete"
-        projectDeleteButton.addEventListener('click', () => {
-            project.deleteProject()
-        })
+        projectDeleteButton.onclick = () => {
+            projectDeleter(project)
+            projectListUpdater()
+        }
 
         newProjectTab.appendChild(newProjectTitle)
         newProjectTab.appendChild(projectDeleteButton)
         projectList.appendChild(newProjectTab)
         
-        newProjectTitle.addEventListener('click', taskListRefresher)
+        newProjectTitle.onclick = taskListRefresher
 
         function taskListRefresher(event) {
             //sets currentproject to whatever, needed to make a function since  
             // modules cannot set values of variable from different modules.
-            currentProjectSetter(event.target.textContent)            
+            currentProjectSetter(event.target.textContent) 
+            displayHeading.textContent = currentProject
             taskListLoader()
         }
 
@@ -96,42 +99,61 @@ function taskListLoader(event) {
 
         if(project.projectName === currentProject) {
             //loop through the taskArrays to display every task 
-            project.taskArray.forEach((array) => {
+            project.taskArray.forEach((array,index) => {
+
+                //adding a intro containng title due date etc.
+                const taskIntro = document.createElement('div')
+                taskIntro.classList.add('task-intro')
+
 
                 //adding a checkbox with title
                 const taskTab = document.createElement('div')
-                // taskTab.classList.add(array.title)
                 taskTab.classList.add('task-tab')
 
-                const taskTitle = document.createElement('div')
+                const taskTitle = document.createElement('button')
                 taskTitle.textContent = array.title
-                // taskTitle.classList.add(array.title)
+
+                //title tab acts as expand button
+                taskTitle.onclick = () => {
+                    taskDescription.classList.toggle('expand')
+                }
                 
                 //actions and info
                 const actions = document.createElement('div')
                 actions.classList.add('actions')
-                const priority = document.createElement('div')
-                priority.textContent = array.priority
-                const expandButton = document.createElement('button')
-                expandButton.textContent = 'Expand'
+                // const priority = document.createElement('div')
+                // priority.textContent = array.priority
                 const deleteButton = document.createElement('button')
                 deleteButton.textContent = 'Delete'
+                deleteButton.onclick = ()=> {
+                    taskDeleter(index)
+                    taskListLoader()
+                }
                 const editButton = document.createElement('button')
                 editButton.textContent = 'Edit'
                 const checkbox = document.createElement('input')
                 checkbox.setAttribute("type", "checkbox")
+
+                //description box
+                const descriptionBox = document.createElement('div')
+                let taskDescription = document.createElement('div')
+                taskDescription.textContent = array.description
+                taskDescription.classList.add('task-description')
+                taskDescription.classList.add('expand')
+
+
+
                 
-                
-                taskTab.appendChild(taskTitle)
-                actions.appendChild(priority)
-                actions.appendChild(expandButton)
+                taskIntro.appendChild(taskTitle)
                 actions.appendChild(editButton)
                 actions.appendChild(deleteButton)
-                taskTab.appendChild(actions)
                 actions.appendChild(checkbox)
+                taskIntro.appendChild(actions)
+                taskTab.appendChild(taskIntro)
+                taskTab.appendChild(taskDescription)
+                // actions.appendChild(priority)
                 taskList.appendChild(taskTab)
 
-                displayHeading.textContent = project.projectName
             })
         }
     })
@@ -143,15 +165,15 @@ function taskListLoader(event) {
 }
 
 
-taskCancelButton.addEventListener('click', (event) => {
+taskCancelButton.onclick = (event) => {
     event.preventDefault()
-})
+}
 
-projectCancelButton.addEventListener('click', (event)=> {
+projectCancelButton.onclick = (event)=> {
     event.preventDefault()
     projectDialog.close()
     projectForm.reset()
-})
+}
 
 export {projectTitle, taskTitle, taskDescription, taskDate, taskPriority,
-     projectListAdder, taskListLoader}
+     projectListUpdater as projectListAdder, taskListLoader}
