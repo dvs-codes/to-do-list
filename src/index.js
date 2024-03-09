@@ -13,11 +13,32 @@ let projects = [{
         duedate: '01/01/2010',
         priority: 'High',
         completion : false,
+        deleteTask: function() {
+            projects.forEach((project) => {
+                let indexOfTask = project.taskArray.indexOf(this) 
+                if(project.projectName === currentProjectName) {
+                    project.taskArray.splice(indexOfTask,1)
+                }
+            })
+        },
+        editTask: function(newTitle, newDescription, newDate, newPriority) {
+            this.title = newTitle;
+            this.description =newDescription;
+            this.duedate = newDate;
+            this.priority = newPriority;
+        },
+        completeTask: function() {
+            if (this.completion===false) { this.completion =true}
+            else {this.completion =false}
+        }
         
     }],
-    completedTasks : [],
     currentProjectSetter: function() {
         currentProjectName = this.projectName
+    },
+    deleteProject: function() {
+        let indexOfProject = projects.indexOf(this)
+        projects.splice(indexOfProject,1)
     }
 }];
 
@@ -26,7 +47,6 @@ class Project {
     constructor(projectName) {
         this.projectName =projectName;
         this.taskArray = []
-        this.completedTasks = []
     }
     
     deleteProject() {
@@ -69,6 +89,11 @@ class Task {
         this.description =newDescription;
         this.duedate = newDate;
         this.priority = newPriority;
+    }
+
+    completeTask() {
+        if (this.completion===false) { this.completion =true}
+        else {this.completion =false}
     }
 }
 

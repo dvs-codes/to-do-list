@@ -99,16 +99,31 @@ function taskListLoader(event) {
 
         if(project.projectName === currentProjectName) {
             //loop through the taskArrays to display every task 
-            project.taskArray.forEach((array,index) => {
+            project.taskArray.forEach(taskRenderor)
 
+            function taskRenderor(array, index) {
                 //adding a intro containng title due date etc.
                 const taskIntro = document.createElement('div')
                 taskIntro.classList.add('task-intro')
 
+                //checbox    
+                const checkBox = document.createElement('input')
+                checkBox.setAttribute("type", "checkbox")
+                checkBox.onclick =  taskCompletion
+                
+                function taskCompletion() {
+                    array.completeTask()
+                    taskTab.classList.toggle('complete')
+                    console.log(projects)
+                }
 
                 //adding a checkbox with title
                 const taskTab = document.createElement('div')
                 taskTab.classList.add('task-tab')
+                if(array.completion === true) {
+                    taskTab.classList.toggle('complete')
+                    checkBox.checked =true
+                }
 
                 const taskTitle = document.createElement('button')
                 taskTitle.textContent = array.title
@@ -121,8 +136,12 @@ function taskListLoader(event) {
                 //actions and info
                 const actions = document.createElement('div')
                 actions.classList.add('actions')
-                // const priority = document.createElement('div')
-                // priority.textContent = array.priority
+
+                //priority
+                const priority = document.createElement('div')
+                priority.textContent = array.priority
+
+                //deletebutton
                 const deleteButton = document.createElement('button')
                 deleteButton.textContent = 'Delete'
                 deleteButton.onclick = ()=> {
@@ -140,21 +159,17 @@ function taskListLoader(event) {
                     editOkButton.textContent = 'confirm edit'
                     taskActions.appendChild(editOkButton)
                     editOkButton.onclick = taskEditor
-            }
-            function taskEditor(event) {
-                    event.preventDefault()
-                    console.log('works')
-                    const taskTitle = document.querySelector('#task-title')
-                    const taskDescription = document.querySelector('#description')
-                    array.editTask(taskTitle.value, taskDescription.value, taskDate.value, taskPriority.value)
-                    console.log(projects)
-                    taskListLoader()
-                    event.target.remove()
-                    taskActions.appendChild(taskOkbutton)
                 }
-
-                const checkbox = document.createElement('input')
-                checkbox.setAttribute("type", "checkbox")
+                function taskEditor(event) {
+                        event.preventDefault()
+                        const taskTitle = document.querySelector('#task-title')
+                        const taskDescription = document.querySelector('#description')
+                        array.editTask(taskTitle.value, taskDescription.value, taskDate.value, taskPriority.value)
+                        console.log(projects)
+                        taskListLoader()
+                        event.target.remove()
+                        taskActions.appendChild(taskOkbutton)
+                    }
 
                 //description box
                 const descriptionBox = document.createElement('div')
@@ -164,16 +179,18 @@ function taskListLoader(event) {
                 taskDescription.classList.add('expand')
 
                 taskIntro.appendChild(taskTitle)
+                actions.appendChild(priority)
                 actions.appendChild(editButton)
                 actions.appendChild(deleteButton)
-                actions.appendChild(checkbox)
+                actions.appendChild(checkBox)
                 taskIntro.appendChild(actions)
                 taskTab.appendChild(taskIntro)
                 taskTab.appendChild(taskDescription)
                 // actions.appendChild(priority)
                 taskList.appendChild(taskTab)
 
-            })
+            
+            }
         }
     })
 
