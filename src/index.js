@@ -1,3 +1,4 @@
+import {format} from "date-fns"
 import './style.css';
 import { taskTitle,taskDescription,taskDate, 
     taskPriority,projectTitle, taskListLoader, projectListUpdater } from './dom_handler';
@@ -10,7 +11,7 @@ let projects = [{
         {
         title: "Default Task",
         description: "lorem ipsum ipsum ipsumesum",
-        duedate: '01/01/2010',
+        dueDate: '01-01-10',
         priority: 'High',
         completion : false,
         deleteTask: function() {
@@ -67,10 +68,10 @@ function projectkMaker() {
 
 
 class Task {
-    constructor(title, description, duedate, priority) {
+    constructor(title, description, dueDate, priority) {
         this.title = title;
         this.description =description;
-        this.duedate = duedate;
+        this.dueDate = dueDate;
         this.priority = priority;
         this.completion = false;
     }
@@ -87,7 +88,7 @@ class Task {
     editTask(newTitle, newDescription, newDate, newPriority) {
         this.title = newTitle;
         this.description =newDescription;
-        this.duedate = newDate;
+        this.dueDate = newDate;
         this.priority = newPriority;
     }
 
@@ -99,8 +100,10 @@ class Task {
 
 function taskAdder() {
     //create a task object
-    const newTask = new Task(taskTitle.value, taskDescription.value, taskDate.value, taskPriority.value)
     
+    const formattedDate = format(taskDate.value, "dd-MM-yy")
+    console.log(formattedDate)
+    const newTask = new Task(taskTitle.value, taskDescription.value, formattedDate, taskPriority.value)
     //push the new task object into current active class, else into default
     projects.forEach((project) => {
         if (currentProjectName === project.projectName ) {

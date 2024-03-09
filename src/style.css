@@ -57,12 +57,6 @@ header {
     padding: 5px;
 }
 
-.actions {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
 .display {
     grid-row: 2/3;
     grid-column: 2/3;
@@ -87,6 +81,16 @@ header {
     height: 30px;
 }
 
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.priority {
+    width: 40px;
+}
+
 .task-tab {
     background-color: rgb(207, 207, 207);
     display: flex;
@@ -95,12 +99,13 @@ header {
     min-height: 30px;
     padding: 5px;
 }
+
 .complete {
     background-color: rgb(77, 247, 34);
 }
+
 .expand {
     display: none;
-
 }
 
 .task-description {
@@ -112,12 +117,6 @@ header {
 .task-button {
     max-width: 700px;
 }
-
-/* .default-task-title {
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
-} */
 
 .git-credit {
     display: flex;

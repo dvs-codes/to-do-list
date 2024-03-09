@@ -91,6 +91,9 @@ function taskListLoader(event) {
     taskList.textContent = ''
     if (event && event.target.className === "ok-button") {
         event.preventDefault()
+        if (taskDate.value ===""){
+            alert("Please enter a valid date value")
+        }
         taskAdder()
     }
 
@@ -137,8 +140,13 @@ function taskListLoader(event) {
                 const actions = document.createElement('div')
                 actions.classList.add('actions')
 
+                //due date
+                const dueDate = document.createElement('div')
+                dueDate.textContent = array.dueDate
+
                 //priority
                 const priority = document.createElement('div')
+                priority.classList.add('priority')
                 priority.textContent = array.priority
 
                 //deletebutton
@@ -179,9 +187,10 @@ function taskListLoader(event) {
                 taskDescription.classList.add('expand')
 
                 taskIntro.appendChild(taskTitle)
-                actions.appendChild(priority)
+                actions.appendChild(dueDate)
                 actions.appendChild(editButton)
                 actions.appendChild(deleteButton)
+                actions.appendChild(priority)
                 actions.appendChild(checkBox)
                 taskIntro.appendChild(actions)
                 taskTab.appendChild(taskIntro)
