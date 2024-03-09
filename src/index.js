@@ -1,4 +1,3 @@
-import {format} from "date-fns"
 import './style.css';
 import { taskTitle,taskDescription,taskDate, 
     taskPriority,projectTitle, taskListLoader, projectListUpdater } from './dom_handler';
@@ -100,10 +99,8 @@ class Task {
 
 function taskAdder() {
     //create a task object
-    
-    const formattedDate = format(taskDate.value, "dd-MM-yy")
-    console.log(formattedDate)
-    const newTask = new Task(taskTitle.value, taskDescription.value, formattedDate, taskPriority.value)
+
+    const newTask = new Task(taskTitle.value, taskDescription.value, taskDate.value, taskPriority.value)
     //push the new task object into current active class, else into default
     projects.forEach((project) => {
         if (currentProjectName === project.projectName ) {

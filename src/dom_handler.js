@@ -91,9 +91,6 @@ function taskListLoader(event) {
     taskList.textContent = ''
     if (event && event.target.className === "ok-button") {
         event.preventDefault()
-        if (taskDate.value ===""){
-            alert("Please enter a valid date value")
-        }
         taskAdder()
     }
 
@@ -161,7 +158,15 @@ function taskListLoader(event) {
                 const editButton = document.createElement('button')
                 editButton.textContent = 'Edit'
                 editButton.onclick = () => {
+                    const taskTitle = document.querySelector('#task-title')
+                    const taskDescription = document.querySelector('#description')
                     taskDialog.showModal()
+
+                    //changing the values of this dialogue
+                    taskTitle.value = array.title
+                    taskDescription.value = array.description
+                    taskPriority.value = array.priority
+                    
                     taskOkbutton.remove()
                     const editOkButton = document.createElement('button')
                     editOkButton.textContent = 'confirm edit'
