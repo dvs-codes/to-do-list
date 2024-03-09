@@ -1,5 +1,4 @@
-import { projects, projectkMaker, taskAdder,currentProjectName,
-        taskDeleter } from "./index"
+import { projects, projectkMaker, taskAdder,currentProjectName } from "./index"
 
 const projectDialog = document.querySelector('.project-dialog')
 const sidebar = document.querySelector('.sidebar')
@@ -20,6 +19,7 @@ const taskTitle = document.getElementById('task-title')
 const taskDescription = document.querySelector('#description')
 const taskDate = document.querySelector('#date')
 const taskPriority = document.querySelector('#priority')
+const taskActions = document.querySelector('.task-actions')
 
 const taskOkbutton = document.querySelector('.ok-button')
 const taskCancelButton = document.querySelector('.cancel-button')
@@ -87,6 +87,7 @@ function projectListUpdater(event) {
 taskOkbutton.onclick = taskListLoader
 
 function taskListLoader(event) {
+
     taskList.textContent = ''
     if (event && event.target.className === "ok-button") {
         event.preventDefault()
@@ -132,26 +133,26 @@ function taskListLoader(event) {
                 //editbutton
                 const editButton = document.createElement('button')
                 editButton.textContent = 'Edit'
-                editButton.onclick = taskEditor
-
-                function taskEditor() {
-                        taskOkbutton.classList.toggle('edit')
-                        const taskeditButton = document.querySelector('.edit')
-                        taskDialog.showModal()
-                        taskeditButton.onclick = (event) => {
-                            // if (event && event.target.className === "edit-button") 
-                                event.preventDefault()
-                                const taskTitle = document.querySelector('#task-title')
-                                const taskDescription = document.querySelector('#description')
-
-                                array.editTask(taskTitle.value, taskDescription.value, taskDate.value, taskPriority.value)
-                                console.log(projects)
-                                taskDialog.close()
-                                taskForm.reset()
-                                taskListLoader()
-                            
-                        }
+                editButton.onclick = () => {
+                    taskDialog.showModal()
+                    taskOkbutton.remove()
+                    const editOkButton = document.createElement('button')
+                    editOkButton.textContent = 'confirm edit'
+                    taskActions.appendChild(editOkButton)
+                    editOkButton.onclick = taskEditor
+            }
+            function taskEditor(event) {
+                    event.preventDefault()
+                    console.log('works')
+                    const taskTitle = document.querySelector('#task-title')
+                    const taskDescription = document.querySelector('#description')
+                    array.editTask(taskTitle.value, taskDescription.value, taskDate.value, taskPriority.value)
+                    console.log(projects)
+                    taskListLoader()
+                    event.target.remove()
+                    taskActions.appendChild(taskOkbutton)
                 }
+
                 const checkbox = document.createElement('input')
                 checkbox.setAttribute("type", "checkbox")
 
@@ -162,9 +163,6 @@ function taskListLoader(event) {
                 taskDescription.classList.add('task-description')
                 taskDescription.classList.add('expand')
 
-
-
-                
                 taskIntro.appendChild(taskTitle)
                 actions.appendChild(editButton)
                 actions.appendChild(deleteButton)
