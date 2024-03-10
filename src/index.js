@@ -42,6 +42,15 @@ let projects = [{
     }
 }];
 
+function getData() {
+    projects = JSON.parse(localStorage.getItem("projects"))
+    currentProjectName = JSON.parse(localStorage.getItem("current project name"))
+}
+
+function populateStorage() {
+    localStorage.setItem("projects",JSON.stringify(projects))
+    localStorage.setItem('current project name', JSON.stringify(currentProjectName))
+}
 
 class Project {
     constructor(projectName) {
@@ -52,19 +61,14 @@ class Project {
     deleteProject() {
         let indexOfProject = projects.indexOf(this)
         projects.splice(indexOfProject,1)
+        populateStorage()
     }
 
     currentProjectSetter() {
         currentProjectName = this.projectName
+        populateStorage()
     }
 }
-
-function projectkMaker() {
-    const newProject = new Project(projectTitle.value)
-    projects.push(newProject)
-    currentProjectName = newProject.projectName
-}
-
 
 class Task {
     constructor(title, description, dueDate, priority) {
@@ -82,6 +86,7 @@ class Task {
                 project.taskArray.splice(indexOfTask,1)
             }
         })
+        populateStorage()
     }
 
     editTask(newTitle, newDescription, newDate, newPriority) {
@@ -89,12 +94,41 @@ class Task {
         this.description =newDescription;
         this.dueDate = newDate;
         this.priority = newPriority;
+        populateStorage()
     }
 
     completeTask() {
         if (this.completion===false) { this.completion =true}
         else {this.completion =false}
+        populateStorage()
     }
+}
+
+//if storage item projects is not available than populatestorage
+//function stores current data inside it.
+if (!localStorage.getItem("projects")) {
+    populateStorage()
+} else {
+    //here if localstorage is available the projects array is updated with
+    //previously stored data.
+    getData()
+
+    //loops through objects and adds prototyep fo Class object back to each of them
+    projects.forEach(project => {
+        Object.setPrototypeOf(project, Project.prototype)
+
+        //loop through eadch tasks to add Class Task prototype into it.
+        project.taskArray.forEach(task => {
+            Object.setPrototypeOf(task, Task.prototype)
+        })
+    })
+}
+
+function projectkMaker() {
+    const newProject = new Project(projectTitle.value)
+    projects.push(newProject)
+    currentProjectName = newProject.projectName
+    populateStorage()
 }
 
 function taskAdder() {
@@ -109,6 +143,8 @@ function taskAdder() {
             defaultProject.taskArray.push(newTask)
         }
     })
+    populateStorage()
+
 }
 
 projectListUpdater()

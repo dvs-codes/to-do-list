@@ -46,6 +46,8 @@ function projectListUpdater(event) {
 
     //takes array item from project array and creates new project tab with 
     //its own eventlisteners
+    // populateStorage()
+
     projects.forEach((project) => {
         const newProjectTab = document.createElement('div')
         newProjectTab.classList.add('project-tab')
